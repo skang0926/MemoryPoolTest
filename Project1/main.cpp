@@ -1,5 +1,6 @@
 #include <iostream>
 #include "MemoryPool.h"
+#include "MemoryPool.cpp"
 #include "time.h"
 
 
@@ -8,19 +9,16 @@ using namespace std;
 
 int main(void)
 {
-	int num = 256*256*256;
+	int num = 256*256*4*4;
 	clock_t start, end;
 	int allocTime;
-	int freeTime;
-	MemoryPool* memoryPool = new MemoryPool(num);	
+	int freeTime;	
 
-	vector<FMemoryBlock*> v2;
-
-
+	vector<FMemoryBlock64*> v2;
 	start = clock();
 	for (int i = 0; i < num; ++i)
 	{
-		FMemoryBlock* memory = new FMemoryBlock;
+		auto* memory = new FMemoryBlock64;
 		v2.push_back(memory);
 	}
 	end = clock();
@@ -39,6 +37,8 @@ int main(void)
 	printf("힙 블록 수 %d, Alloc 시간 : %d ms \n", num, allocTime);
 	printf("힙 블록 수 %d, Free 시간 : %d ms \n\n", num, freeTime);
 
+
+	MemoryPool<FMemoryBlock64>* memoryPool = new MemoryPool<FMemoryBlock64>(num);
 
 	vector<void*> v;
 

@@ -2,9 +2,10 @@
 
 #include "MemoryPool.h"
 
-MemoryPool::MemoryPool(int size)
+template <typename T>
+MemoryPool<T>::MemoryPool(int size)
 {
-	memoryPool = new FMemoryBlock[size];
+	memoryPool = new T[size];
 	memoryPoolSize = size;
 	for (int i = 0; i < size; ++i)
 	{
@@ -12,13 +13,16 @@ MemoryPool::MemoryPool(int size)
 	}
 }
 
-MemoryPool::~MemoryPool()
+template <typename T>
+MemoryPool<T>::~MemoryPool()
 {
 	if (memoryPool != nullptr)
 		delete[] memoryPool;
 }
 
-void* MemoryPool::Alloc()
+
+template <typename T>
+void* MemoryPool<T>::Alloc()
 {	
 	if (indexList.empty()) return nullptr;
 
@@ -27,11 +31,12 @@ void* MemoryPool::Alloc()
 	return memory;
 }
 
-void MemoryPool::Free(void* memory)
+template <typename T>
+void MemoryPool<T>::Free(void* memory)
 {	
 	if (memory == nullptr) return;
 
-	FMemoryBlock* memoryPtr = reinterpret_cast<FMemoryBlock*>(memory);
+	T* memoryPtr = reinterpret_cast<T*>(memory);
 	int memoryIndex = memoryPtr - &memoryPool[0];
 
 	if (memoryIndex >= memoryPoolSize && memoryIndex < 0)

@@ -6,11 +6,22 @@
 #include <list>
 using namespace std;
 
-struct FMemoryBlock
+struct FMemoryBlock64
+{
+	char buffer[64];
+};
+
+struct FMemoryBlock128
+{
+	char buffer[128];
+};
+
+struct FMemoryBlock256
 {
 	char buffer[256];
 };
 
+template <typename T = FMemoryBlock64>
 class MemoryPool
 {
 public:
@@ -21,7 +32,7 @@ public:
 	void Free(void* memory);
 
 private:
-	FMemoryBlock* memoryPool = nullptr;
+	T* memoryPool = nullptr;
 
 	list<int> indexList;
 	int memoryPoolSize;
