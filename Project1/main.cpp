@@ -33,7 +33,7 @@ int main(void)
 	vector<TestClass*> v1;
 	for (int i = 0; i < 5; ++i)
 	{
-		auto test = reinterpret_cast<TestClass*>(memoryPool->Alloc());
+		auto test = reinterpret_cast<TestClass*>(memoryPool->Alloc(sizeof(TestClass)));
 		test->x = i;
 		test->y = -i;
 		v1.push_back(test);
@@ -49,7 +49,9 @@ int main(void)
 
 	for (int i = 0; i < 5; ++i)
 	{
-		auto test = reinterpret_cast<TestClass*>(memoryPool->Alloc());
+		auto test = reinterpret_cast<TestClass*>(memoryPool->Alloc(sizeof(TestClass)));
+		test->x = i;
+		test->y = -i;
 		v1.push_back(test);
 	}
 

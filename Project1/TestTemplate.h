@@ -17,7 +17,7 @@ void TestMemoryPool(T&& t, int num)
 	start = clock();
 	for (int i = 0; i < num; ++i)
 	{
-		void* memory = memoryPool->Alloc();
+		void* memory = memoryPool->Alloc(sizeof(T)-sizeof(char*));
 		v.push_back(memory);
 	}
 	end = clock();

@@ -26,7 +26,8 @@ public:
 	MemoryPool(size_t size);
 	~MemoryPool();
 
-	void* Alloc();
+	void* Alloc(int&& memorySize);
+
 	void Free(void* memory);
 
 private:
@@ -63,15 +64,21 @@ MemoryPool<T>::~MemoryPool()
 }
 
 template <typename T>
-void* MemoryPool<T>::Alloc()
+void* MemoryPool<T>::Alloc(int&& memorySize)
 {
+	if (memorySize > sizeof(T))
+	{
+		_ASSERT_EXPR(false, L"MemoryBlock's size exceeded");
+		return nullptr;
+	}
+
 	if (pivot == nullptr)
 	{
 		_ASSERT_EXPR(false, L"MemoryPool is full");
 		return nullptr;
 	}
 
-	char* memoryPtr = pivot + sizeof(char*);
+	char* memoryPtr = pivot;
 	pivot = *reinterpret_cast<char**>(pivot);
 	return reinterpret_cast<void*>(memoryPtr);
 }
@@ -79,7 +86,7 @@ void* MemoryPool<T>::Alloc()
 template <typename T>
 void MemoryPool<T>::Free(void* memory)
 {
-	char** freeMemory = reinterpret_cast<char**>(memory) - 1;
+	char** freeMemory = reinterpret_cast<char**>(memory);
 	*freeMemory = pivot;
 	pivot = reinterpret_cast<char*>(freeMemory);
 
