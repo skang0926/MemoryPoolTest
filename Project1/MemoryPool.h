@@ -86,9 +86,8 @@ void* MemoryPool<T>::Alloc(int&& memorySize)
 template <typename T>
 void MemoryPool<T>::Free(void* memory)
 {
-	char** freeMemory = reinterpret_cast<char**>(memory);
-	*freeMemory = pivot;
-	pivot = reinterpret_cast<char*>(freeMemory);
+	*reinterpret_cast<char**>(memory) = pivot;
+	pivot = reinterpret_cast<char*>(memory);
 
 	return;
 }
